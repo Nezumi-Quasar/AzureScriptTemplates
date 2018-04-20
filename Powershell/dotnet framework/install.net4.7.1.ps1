@@ -13,7 +13,7 @@ Param(
 
 Set-StrictMode -Version Latest
 
-$logFile = Join-Path $env:TEMP -ChildPath "InstallNetFx46ScriptLog.txt"
+$logFile = Join-Path $env:TEMP -ChildPath "InstallNetFx471ScriptLog.txt"
 
 # Check if the latest NetFx46 version exists
 $netFxKey = Get-ItemProperty -Path "HKLM:\SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full\\" -ErrorAction Ignore
@@ -25,9 +25,9 @@ if($netFxKey -and $netFxKey.Release -ge 461308) {
 
 # Download the latest NetFx46
 $setupFileSourceUri = "http://go.microsoft.com/fwlink/?LinkId=852104"
-$setupFileLocalPath = Join-Path $env:TEMP -ChildPath "NDP462-KB3151800-x86-x64-AllOS-ENU.exe"
+$setupFileLocalPath = Join-Path $env:TEMP -ChildPath "NDP471-KB4033342-x86-x64-AllOS-ENU.exe"
 
-"$(Get-Date): Start to download NetFx 4.7.1 to $s." | Tee-Object -FilePath $logFile -Append
+"$(Get-Date): Start to download NetFx 4.7.1 to $setupFileLocalPath." | Tee-Object -FilePath $logFile -Append
 
 if(Test-Path $setupFileLocalPath)
 {
@@ -61,11 +61,11 @@ do
 
 if(!(Test-Path $setupFileLocalPath))
 {
-    "$(Get-Date): Failed to download NetFx 4.6.1 setup package." | Tee-Object -FilePath $logFile -Append
+    "$(Get-Date): Failed to download NetFx 4.7.1 setup package." | Tee-Object -FilePath $logFile -Append
     exit -1
 }
 
-# Install NetFx46
+# Install NetFx471
 $setupLogFilePath = Join-Path $env:TEMP -ChildPath "NetFx471SetupLog.txt"
 if($norestart) {
     $arguments = "/q /norestart /serialdownload /log $setupLogFilePath"
@@ -73,7 +73,7 @@ if($norestart) {
 else {
     $arguments = "/q /serialdownload /log $setupLogFilePath"
 }
-"$(Get-Date): Start to install NetFx 4.1.1" | Tee-Object -FilePath $logFile -Append
+"$(Get-Date): Start to install NetFx 4.7.1" | Tee-Object -FilePath $logFile -Append
 $process = Start-Process -FilePath $setupFileLocalPath -ArgumentList $arguments -Wait -PassThru
 
 if(-not $process) {
